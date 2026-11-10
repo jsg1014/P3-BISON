@@ -1,0 +1,7 @@
+temperatura = 38
+select
+when temperatura < 30 then do
+say "temperatura=", temperatura
+say "Enciende el climatizador"
+end
+end

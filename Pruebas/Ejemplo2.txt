@@ -1,0 +1,4 @@
+/* Entrada salida, negativos y mezcla mayúsculas/minúsculas */
+pUll _INPUT
+b = (_INPUT - 1) / -2
+Say "_INPUT=", _INPUT, "; b=", b

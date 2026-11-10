@@ -1,0 +1,7 @@
+pull inf
+pull sup
+pull val
+select
+when val <= inf then do say "MUY BAJO" end
+when val >= sup then do say "MUY ALTO" end
+end

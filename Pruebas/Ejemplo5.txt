@@ -1,0 +1,7 @@
+x = 4
+if x > 5 then do
+say ’GRANDE’
+end
+else do
+say "PEQUENO"
+end
