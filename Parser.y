@@ -105,3 +105,19 @@ listaBY:/* vacio */
        | BY NUM
        | BY ADDING NUM
        | BY SUBTRACTING NUM ;
+
+%%
+void yyerror(const char *s){
+	fprintf(stderr, "Error: %s\n",s);
+} 
+int main(int argc, char *argv[]) {
+	
+	if (argc>1){
+		yyin= fopen(argv[1],"r");
+		if(yyin==NULL){
+			perror(argv[1]);
+			return 1;
+   		}
+	}
+	return yyparse();
+}
