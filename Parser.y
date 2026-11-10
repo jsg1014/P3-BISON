@@ -88,3 +88,15 @@ listaWHEN: clausulaWHEN
 
 listaOTHERWISE: /* vacio */
 	      | OTHERWISE bloque ;
+
+bucle: DO listaBucle condicion sentencias END ; 
+
+listaBucle: WHILE
+	  | UNTIL;
+
+bucleContador: DO ID IGUAL expresion TO expresion sentencias END
+	     | DO ID IGUAL expresion TO expresion listaBY sentencias END;
+
+listaBY: BY NUM
+       | BY ADDING NUM
+       | BY SUBSTRACTING ;
