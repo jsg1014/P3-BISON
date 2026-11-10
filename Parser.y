@@ -3,11 +3,7 @@
  * Mini-REXX: traductor a la máquina de pila abstracta.
  * Autor : Jairo Sanchez Gonzalez
  * Fecha : 30/11/2026
- * Compilación:  javacc Parser.jj && javac *.java
- * Uso:          java REXXCompiler [fichero.rexx]   (sin argumento lee de stdin)
- *
- * El código se emite directamente en el orden en que se reconoce la entrada;
- * no se usan variables auxiliares en el código intermedio, solo etiquetas.
+ * Compilación:  bison -yd -v Parser.y
  */
 
 /* Declaracion de los tokens*/
@@ -36,7 +32,21 @@ sentencia: asignacion
 	 | condicional
 	 | seleccion
 	 | bucle ;
+termino: factor
+       | termino '*' factor
+       | termino '/' factor ;
 
+factor: atomo
+      | '-' atomo
+      | '+' atomo ;
+
+atomo: NUM
+     | ID
+     | '(' expresion ')' 
+     | elegir	;
+
+elegir: CHOOSE '(' condicion ',' expresion ',' expresion ')' ;
+      	
 expresion: termino
 	 | expresion '+' termino
   	 | expresion '-' termino ;
