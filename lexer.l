@@ -1,13 +1,9 @@
 /*
  * Práctica de Bison — Procesadores de Lenguajes 2026-27
- * Mini-REXX: traductor a la máquina de pila abstracta.
+ * lexer.l: Programa que nos permite analizar palabras reservadas, NUM,ID,CAD y comentarios y saltos de linea.
  * Autor : Jairo Sanchez Gonzalez
  * Fecha : 30/11/2026
- * Compilación:  javacc Parser.jj && javac *.java
- * Uso:          java REXXCompiler [fichero.rexx]   (sin argumento lee de stdin)
- *
- * El código se emite directamente en el orden en que se reconoce la entrada;
- * no se usan variables auxiliares en el código intermedio, solo etiquetas.
+ * Compilación:  flex lexer.l
  */
 
 
