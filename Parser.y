@@ -19,6 +19,7 @@ void yyerror(const char *s);
 	char * pal;
 }
 %token PULL SAY IF ELSE THEN DO END SELECT WHEN OTHERWISE WHILE UNTIL TO BY ADDING SUBTRACTING <num>NUM <pal>CAD <pal>ID CHOOSE MENORIGUAL MAYORIGUAL DISTINTO MAYOR MENOR IGUAL
+%type <num> listaSalida
 %%
 
 programa: sentencias ;
@@ -33,34 +34,34 @@ sentencia: asignacion
 	 | seleccion
 	 | bucle ;
 termino: factor
-       | termino '*' factor
-       | termino '/' factor ;
+       | termino '*' factor {printf("mul\n");}
+       | termino '/' factor {printf("div\n");} ;
 
 factor: atomo
-      | '-' atomo
-      | '+' atomo ;
+      | '-' {printf("mete 0\n");}  atomo {printf("sub\n");}
+      | '+' atomo {printf("add\n");} ;
 
-atomo: NUM
-     | ID
+atomo: NUM {printf("mete %d\n",$1);}
+     | ID  { printf("valord %s\n",$1);}
      | '(' expresion ')' 
      | elegir	;
 
 elegir: CHOOSE '(' condicion ',' expresion ',' expresion ')' ;
       	
-expresion: termino
-	 | expresion '+' termino
-  	 | expresion '-' termino ;
+expresion: termino 
+	 | expresion '+' termino {printf("add\n");}
+  	 | expresion '-' termino {printf("sub\n");}
 
-asignacion: ID IGUAL expresion ;
+asignacion: ID IGUAL {printf("valori %s\n",$1);} expresion {printf("asigna\n");} ;
 
-entrada: PULL ID ;
+entrada: PULL ID {printf("lee %s\n",$2);} ;
 
-elementoSalida: CAD | expresion;
+elementoSalida: CAD {printf("metecad %s\n",$1);} | expresion;
 
-listaSalida: elementoSalida
-	   | listaSalida ',' elementoSalida ;
+listaSalida: elementoSalida {$$ =1;}
+	   | listaSalida ',' elementoSalida {$$=$1+1;} ;
 	   
-salida: SAY listaSalida ;
+salida: SAY listaSalida {printf("print %d\n",$2);};
 
 bloque: DO sentencias END ;
 
