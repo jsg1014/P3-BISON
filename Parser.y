@@ -13,6 +13,7 @@
 extern FILE *yyin;
 int yylex(void);
 void yyerror(const char *s);
+int etiq=0;
 %} 
 %union {
 	int num;
@@ -96,8 +97,8 @@ bucle: bucleWHILE
      | bucleContador ; 
 
 
-bucleWHILE: DO WHILE condicion sentencias END ;
-	
+bucleWHILE: DO WHILE{$<num>$ = etiq++;printf("LBL%d:\n",$<num>$);} condicion{$<num>$ = etiq++;printf("sifalsovea LBL%d\n",$<num>$);} sentencias END{printf("vea LBL%d\n",$<num>3);printf("LBL%d:\n",$<num>5);};
+
 bucleUNTIL : DO UNTIL condicion sentencias END ;
 
 bucleContador: DO ID IGUAL expresion TO expresion sentencias END
