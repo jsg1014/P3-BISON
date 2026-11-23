@@ -20,6 +20,7 @@ void yyerror(const char *s);
 }
 %token PULL SAY IF ELSE THEN DO END SELECT WHEN OTHERWISE WHILE UNTIL TO BY ADDING SUBTRACTING <num>NUM <pal>CAD <pal>ID CHOOSE MENORIGUAL MAYORIGUAL DISTINTO MAYOR MENOR IGUAL
 %type <num> listaSalida
+%type <pal> relacion
 %%
 
 programa: sentencias ;
@@ -46,7 +47,7 @@ atomo: NUM {printf("mete %d\n",$1);}
      | '(' expresion ')' 
      | elegir	;
 
-elegir: CHOOSE '(' condicion ',' expresion ',' expresion ')' ;
+elegir: CHOOSE '(' condicion ','{$<num>$ = etiq++; printf("sifalsovea LBL%d\n", $<num>$);} expresion  ','{$<num>$ = etiq++; printf("vea LBL%d\n",$<num>$); printf("LBL%d:\n",$<num>5);} expresion  ')'{printf("LBL%d:\n",$<num>8);} ;
       	
 expresion: termino 
 	 | expresion '+' termino {printf("add\n");}
@@ -65,15 +66,15 @@ salida: SAY listaSalida {printf("print %d\n",$2);};
 
 bloque: DO sentencias END ;
 
-relacion: MAYOR
-	| MENOR
-	| IGUAL
-	| DISTINTO
-	| MENORIGUAL
-	| MAYORIGUAL ;
+relacion: MAYOR {$$ = "esmayor";}
+	| MENOR {$$ = "esmenor";}
+	| IGUAL {$$ = "esigual";}
+	| DISTINTO {$$ = "esdistinto\nnot";}
+	| MENORIGUAL {$$ = "esmayor\nnot";}
+	| MAYORIGUAL {$$ = "esmenor\nnot";};
 
 condicion: expresion 
-	 | expresion relacion expresion ;
+	 | expresion relacion expresion {printf("%s\n",$2);} ;
 
 condicional: IF condicion THEN bloque bloqueElse ;
 
