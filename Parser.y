@@ -20,7 +20,7 @@ int etiq=0;
 	char * pal;
 }
 %token PULL SAY IF ELSE THEN DO END SELECT WHEN OTHERWISE WHILE UNTIL TO BY ADDING SUBTRACTING <num>NUM <pal>CAD <pal>ID CHOOSE MENORIGUAL MAYORIGUAL DISTINTO MAYOR MENOR IGUAL
-%type <num> listaSalida
+%type <num> listaSalida listaBY listaWHEN
 %type <pal> relacion
 %%
 
@@ -82,12 +82,12 @@ condicional: IF condicion THEN{$<num>$ = etiq++; printf("sifalsovea LBL%d\n",$<n
 bloqueElse: /* vacio */
     	  | ELSE bloque ;
 
-clausulaWHEN: WHEN condicion THEN bloque ;
+clausulaWHEN: WHEN condicion THEN{$<num>$ = etiq++; printf("sifalsovea LBL%d\n",$<num>$);} bloque{printf("vea LBL%d\n",$<num>0); printf("LBL%d:\n",$<num>4);} ;
 
-seleccion: SELECT listaWHEN listaOTHERWISE END ; 
+seleccion: SELECT{$<num>$ = etiq++; } listaWHEN listaOTHERWISE END {printf("LBL%d:\n",$<num>2);}; 
 
-listaWHEN: clausulaWHEN
-	 | listaWHEN clausulaWHEN;
+listaWHEN: clausulaWHEN {$$ = $<num>0;}
+	 | listaWHEN clausulaWHEN {$$ = $1;};
 
 listaOTHERWISE: /* vacio */
 	      | OTHERWISE bloque ;
@@ -99,15 +99,14 @@ bucle: bucleWHILE
 
 bucleWHILE: DO WHILE{$<num>$ = etiq++;printf("LBL%d:\n",$<num>$);} condicion{$<num>$ = etiq++;printf("sifalsovea LBL%d\n",$<num>$);} sentencias END{printf("vea LBL%d\n",$<num>3);printf("LBL%d:\n",$<num>5);};
 
-bucleUNTIL : DO UNTIL condicion sentencias END ;
+bucleUNTIL : DO UNTIL {$<num>$ = etiq;etiq = etiq +3;printf("vea LBL%d\n",$<num>$+1);printf("LBL%d:\n",$<num>$);} condicion{printf("siciertovea LBL%d\n",$<num>3+2); printf("LBL%d:\n",$<num>3+1);} sentencias END{printf("vea LBL%d\n",$<num>3); printf("LBL%d:\n",$<num>3+2);} ;
 
-bucleContador: DO ID IGUAL expresion TO expresion sentencias END
-	     | DO ID IGUAL expresion TO expresion listaBY sentencias END;
+bucleContador: DO ID IGUAL{printf("valori %s\n",$2);} expresion{printf("asigna\n");$<num>$ = etiq++;printf("LBL%d:\n",$<num>$);printf("valord %s\n",$2);} TO expresion listaBY{ $<num>$ = etiq++; if ($9>0) printf("esmayor\n"); else printf("esmenor\n"); printf("not\n"); printf("sifalsovea LBL%d\n",$<num>$);} sentencias END {printf("valori %s\n",$2); printf("valord %s\n",$2); if($9 >0) {printf("mete %d\n",$9); printf("add\n");}else {printf("mete %d\n",-$9); printf("sub\n");} printf("asigna\n"); printf("vea LBL%d\n",$<num>6); printf("LBL%d:\n",$<num>10);};
 
-listaBY:/* vacio */
-       | BY NUM
-       | BY ADDING NUM
-       | BY SUBTRACTING NUM ;
+listaBY:/* vacio */ {$$ = 1;}
+       | BY NUM {if ($2 == 0) yyerror("Error, nunca puede ser 0"); $$ = $2;}
+       | BY ADDING NUM {if ($3 == 0) yyerror("Error, nunca puede ser 0"); $$ = $3;}
+       | BY SUBTRACTING NUM {if ($3 == 0) yyerror("Error, nunca puede ser 0"); $$ = -$3;};
 
 %%
 void yyerror(const char *s){
