@@ -76,7 +76,7 @@ relacion: MAYOR {$$ = "esmayor";}
 condicion: expresion 
 	 | expresion relacion expresion {printf("%s\n",$2);} ;
 
-condicional: IF condicion THEN bloque bloqueElse ;
+condicional: IF condicion THEN{$<num>$ = etiq++; printf("sifalsovea LBL%d\n",$<num>$);} bloque{$<num>$ = etiq++;printf("vea LBL%d\n",$<num>$); printf("LBL%d:\n",$<num>4);} bloqueElse{printf("LBL%d:\n",$<num>6);} ;
 
 bloqueElse: /* vacio */
     	  | ELSE bloque ;
